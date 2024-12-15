@@ -9,7 +9,7 @@
     body {
       font-family: Arial, sans-serif;
       background: #1E1E1E;
-      color: #FFA500;
+      color: #FFA500; /* Оранжевый */
       margin: 0;
       padding: 0;
       display: flex;
@@ -28,7 +28,7 @@
     }
 
     h1 {
-      color: #FFA500;
+      color: #FFA500; /* Оранжевый */
       margin-bottom: 20px;
       font-size: 2rem;
     }
@@ -36,7 +36,7 @@
     button {
       padding: 10px 20px;
       margin: 10px 10px 0 10px;
-      background: #FF4500;
+      background: #FF5733; /* Ярко-красный с оранжевым */
       color: white;
       font-size: 1rem;
       font-weight: bold;
@@ -47,7 +47,7 @@
     }
 
     button:hover {
-      background: #FF6347;
+      background: #FF7043; /* Легко осветленный красно-оранжевый */
     }
 
     #info {
@@ -67,7 +67,7 @@
     footer {
       margin-top: 20px;
       font-size: 1rem;
-      color: #FFA500;
+      color: #FFA500; /* Оранжевый */
     }
 
     footer a {
@@ -84,10 +84,10 @@
 <body>
   <div class="container">
     <h1>GIO-INFO</h1>
-    <button onclick="getLocation()">🌍 Определить местоположение</button>
+    <button onclick="getLocation()">Определить местоположение</button>
     <div id="info"></div>
-    <button id="copyButton" style="display: none;" onclick="copyToClipboard()">📋 Копировать координаты</button>
-    <button id="shareButton" style="display: none;" onclick="shareLocation()">🔗 Поделиться</button>
+    <button id="copyButton" style="display: none;" onclick="copyToClipboard()">Копировать координаты</button>
+    <button id="shareButton" style="display: none;" onclick="shareLocation()">Поделиться</button>
   </div>
   <div id="map"></div>
   <footer>
@@ -101,10 +101,10 @@
       const infoDiv = document.getElementById('info');
       const copyButton = document.getElementById('copyButton');
       const shareButton = document.getElementById('shareButton');
-      infoDiv.textContent = '🌍 Определение местоположения...';
+      infoDiv.textContent = 'Определение местоположения...';
 
       if (!navigator.geolocation) {
-        infoDiv.textContent = '🚫 Ваш браузер не поддерживает геолокацию.';
+        infoDiv.textContent = 'Ваш браузер не поддерживает геолокацию.';
         copyButton.style.display = 'none';
         shareButton.style.display = 'none';
         return;
@@ -123,7 +123,7 @@
           updateMap(latitude, longitude);
         },
         () => {
-          infoDiv.textContent = '❌ Не удалось получить доступ к геолокации. Проверьте разрешения.';
+          infoDiv.textContent = 'Не удалось получить доступ к геолокации. Проверьте разрешения.';
           copyButton.style.display = 'none';
           shareButton.style.display = 'none';
         }
@@ -133,8 +133,8 @@
     function copyToClipboard() {
       if (currentCoords) {
         navigator.clipboard.writeText(currentCoords)
-          .then(() => alert('✔️ Координаты скопированы в буфер обмена!'))
-          .catch(() => alert('⚠️ Ошибка при копировании.'));
+          .then(() => alert('Координаты скопированы в буфер обмена!'))
+          .catch(() => alert('Ошибка при копировании.'));
       }
     }
 
@@ -147,7 +147,7 @@
         })
         .catch((error) => console.log('Ошибка при отправке:', error));
       } else {
-        alert('❌ Ваш браузер не поддерживает функцию "Поделиться".');
+        alert('Ваш браузер не поддерживает функцию "Поделиться".');
       }
     }
 
@@ -157,7 +157,7 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-        marker = L.marker([lat, lng]).addTo(map).bindPopup('📍 Ваше местоположение').openPopup();
+        marker = L.marker([lat, lng]).addTo(map).bindPopup('Ваше местоположение').openPopup();
       } else {
         map.setView([lat, lng], 13);
         marker.setLatLng([lat, lng]).update();
