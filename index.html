@@ -6,10 +6,11 @@
   <title>GIO-INFO</title>
   <link rel="icon" href="https://cdn.discordapp.com/attachments/1124286891110449294/1317872069655920700/Pixelion_2.png?ex=67604382&is=675ef202&hm=8b51e3d77eabd48ba233f382063d240fc0158a59286be0e481edd412b3a90daa&">
   <style>
+    /* Общий стиль */
     body {
       font-family: 'Arial', sans-serif;
-      background-color: #121212;
-      color: #FFFFFF;
+      background: linear-gradient(135deg, #1E1E1E, #252525);
+      color: #FFA500;
       margin: 0;
       padding: 0;
       display: flex;
@@ -17,74 +18,101 @@
       align-items: center;
       text-align: center;
     }
+
+    /* Контейнер с информацией */
     .container {
       padding: 20px;
-      background-color: #1E1E1E;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      background: #2b2b2b;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
       max-width: 400px;
       width: 90%;
       margin-top: 20px;
+      border: 2px solid #FFA500;
     }
+
+    /* Заголовок */
     h1 {
-      color: #00FF7F;
+      color: #FFA500;
       margin-bottom: 20px;
+      font-size: 2rem;
+      text-shadow: 0 3px 10px rgba(255, 165, 0, 0.7);
     }
+
+    /* Кнопки */
     button {
-      padding: 10px 20px;
+      padding: 12px 25px;
       margin: 10px 10px 0 10px;
-      background-color: #00FF7F;
-      color: #121212;
+      background: #FFA500;
+      color: #1E1E1E;
       font-size: 1rem;
       font-weight: bold;
       border: none;
-      border-radius: 5px;
+      border-radius: 30px;
       cursor: pointer;
+      box-shadow: 0 5px 10px rgba(255, 165, 0, 0.4);
       transition: all 0.3s ease;
     }
+
     button:hover {
-      background-color: #00cc63;
+      background: #FF8C00;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 15px rgba(255, 140, 0, 0.5);
     }
-    .info {
-      margin-top: 15px;
-      line-height: 1.5;
-    }
+
     .btn-copy {
       background-color: #FFA07A;
-      margin-top: 10px;
     }
+
     .btn-copy:hover {
       background-color: #FF6347;
     }
+
+    /* Текст информации */
+    .info {
+      margin-top: 15px;
+      line-height: 1.5;
+      font-size: 1.2rem;
+      color: #FFD700;
+    }
+
+    /* Карта */
     #map {
       margin-top: 20px;
       height: 300px;
       width: 90%;
-      border-radius: 10px;
+      border-radius: 15px;
       overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      border: 2px solid #FFA500;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     }
+
+    /* Футер */
     footer {
       margin-top: 20px;
-      font-size: 0.9rem;
-      color: #A9A9A9;
+      font-size: 1rem;
+      color: #FFA500;
+      text-shadow: 0 2px 5px rgba(255, 165, 0, 0.6);
     }
+
     footer a {
-      color: #FFA07A;
+      color: #FFD700;
       text-decoration: none;
       font-weight: bold;
     }
+
     footer a:hover {
       text-decoration: underline;
+      color: #FF8C00;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>GIO-INFO</h1>
-    <button onclick="getLocation()">Определить местоположение</button>
+    <button onclick="getLocation()">🌍 Определить местоположение</button>
     <div id="info" class="info"></div>
-    <button class="btn-copy" id="copyButton" style="display: none;" onclick="copyToClipboard()">Копировать координаты</button>
+    <button class="btn-copy" id="copyButton" style="display: none;" onclick="copyToClipboard()">📋 Копировать координаты</button>
   </div>
   <div id="map"></div>
   <footer>
@@ -97,10 +125,10 @@
     function getLocation() {
       const infoDiv = document.getElementById('info');
       const copyButton = document.getElementById('copyButton');
-      infoDiv.textContent = 'Определение местоположения...';
+      infoDiv.textContent = '🌍 Определение местоположения...';
 
       if (!navigator.geolocation) {
-        infoDiv.textContent = 'Ваш браузер не поддерживает геолокацию.';
+        infoDiv.textContent = '🚫 Ваш браузер не поддерживает геолокацию.';
         copyButton.style.display = 'none';
         return;
       }
@@ -117,7 +145,7 @@
           updateMap(latitude, longitude);
         },
         () => {
-          infoDiv.textContent = 'Не удалось получить доступ к геолокации. Проверьте разрешения.';
+          infoDiv.textContent = '❌ Не удалось получить доступ к геолокации. Проверьте разрешения.';
           copyButton.style.display = 'none';
         }
       );
@@ -126,8 +154,8 @@
     function copyToClipboard() {
       if (currentCoords) {
         navigator.clipboard.writeText(currentCoords)
-          .then(() => alert('Координаты скопированы в буфер обмена!'))
-          .catch(() => alert('Ошибка при копировании.'));
+          .then(() => alert('✔️ Координаты скопированы в буфер обмена!'))
+          .catch(() => alert('⚠️ Ошибка при копировании.'));
       }
     }
 
@@ -137,7 +165,7 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-        marker = L.marker([lat, lng]).addTo(map).bindPopup('Ваше местоположение').openPopup();
+        marker = L.marker([lat, lng]).addTo(map).bindPopup('📍 Ваше местоположение').openPopup();
       } else {
         map.setView([lat, lng], 13);
         marker.setLatLng([lat, lng]).update();
