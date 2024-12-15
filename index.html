@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GIO-INFO</title>
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/119/119595.png">
+  <link rel="icon" href="https://cdn.discordapp.com/attachments/1124286891110449294/1317872069655920700/Pixelion_2.png?ex=67604382&is=675ef202&hm=8b51e3d77eabd48ba233f382063d240fc0158a59286be0e481edd412b3a90daa&">
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -14,9 +14,7 @@
       padding: 0;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      height: 100vh;
       text-align: center;
     }
     .container {
@@ -26,6 +24,7 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
       max-width: 400px;
       width: 90%;
+      margin-top: 20px;
     }
     h1 {
       color: #00FF7F;
@@ -57,6 +56,27 @@
     .btn-copy:hover {
       background-color: #FF6347;
     }
+    #map {
+      margin-top: 20px;
+      height: 300px;
+      width: 90%;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+    footer {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #A9A9A9;
+    }
+    footer a {
+      color: #FFA07A;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -66,11 +86,14 @@
     <div id="info" class="info"></div>
     <button class="btn-copy" id="copyButton" style="display: none;" onclick="copyToClipboard()">Копировать координаты</button>
   </div>
+  <div id="map"></div>
+  <footer>
+    Made by <a href="https://github.com/gigandbro/" target="_blank">gig</a> via 🧡
+  </footer>
 
   <script>
-    let currentCoords = '';
+    let map, marker, currentCoords = '';
 
-    // Получение геолокации
     function getLocation() {
       const infoDiv = document.getElementById('info');
       const copyButton = document.getElementById('copyButton');
@@ -91,6 +114,7 @@
             <p><strong>Долгота:</strong> ${longitude.toFixed(4)}</p>
           `;
           copyButton.style.display = 'block';
+          updateMap(latitude, longitude);
         },
         () => {
           infoDiv.textContent = 'Не удалось получить доступ к геолокации. Проверьте разрешения.';
@@ -99,7 +123,6 @@
       );
     }
 
-    // Копирование координат в буфер обмена
     function copyToClipboard() {
       if (currentCoords) {
         navigator.clipboard.writeText(currentCoords)
@@ -107,6 +130,21 @@
           .catch(() => alert('Ошибка при копировании.'));
       }
     }
+
+    function updateMap(lat, lng) {
+      if (!map) {
+        map = L.map('map').setView([lat, lng], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        marker = L.marker([lat, lng]).addTo(map).bindPopup('Ваше местоположение').openPopup();
+      } else {
+        map.setView([lat, lng], 13);
+        marker.setLatLng([lat, lng]).update();
+      }
+    }
   </script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </body>
 </html>
