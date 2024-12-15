@@ -6,10 +6,9 @@
   <title>GIO-INFO</title>
   <link rel="icon" href="https://cdn.discordapp.com/attachments/1124286891110449294/1317872069655920700/Pixelion_2.png?ex=67604382&is=675ef202&hm=8b51e3d77eabd48ba233f382063d240fc0158a59286be0e481edd412b3a90daa&">
   <style>
-    /* Общий стиль */
     body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #1E1E1E, #252525);
+      font-family: Arial, sans-serif;
+      background: #1E1E1E;
       color: #FFA500;
       margin: 0;
       padding: 0;
@@ -19,91 +18,66 @@
       text-align: center;
     }
 
-    /* Контейнер с информацией */
     .container {
       padding: 20px;
-      background: #2b2b2b;
-      border-radius: 15px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+      background: #2B2B2B;
+      border-radius: 10px;
       max-width: 400px;
       width: 90%;
       margin-top: 20px;
-      border: 2px solid #FFA500;
     }
 
-    /* Заголовок */
     h1 {
       color: #FFA500;
       margin-bottom: 20px;
       font-size: 2rem;
-      text-shadow: 0 3px 10px rgba(255, 165, 0, 0.7);
     }
 
-    /* Кнопки */
     button {
-      padding: 12px 25px;
+      padding: 10px 20px;
       margin: 10px 10px 0 10px;
-      background: #FFA500;
-      color: #1E1E1E;
+      background: #FF4500;
+      color: white;
       font-size: 1rem;
       font-weight: bold;
       border: none;
-      border-radius: 30px;
+      border-radius: 5px;
       cursor: pointer;
-      box-shadow: 0 5px 10px rgba(255, 165, 0, 0.4);
-      transition: all 0.3s ease;
+      transition: background 0.3s ease;
     }
 
     button:hover {
-      background: #FF8C00;
-      transform: translateY(-3px);
-      box-shadow: 0 8px 15px rgba(255, 140, 0, 0.5);
+      background: #FF6347;
     }
 
-    .btn-copy {
-      background-color: #FFA07A;
-    }
-
-    .btn-copy:hover {
-      background-color: #FF6347;
-    }
-
-    /* Текст информации */
-    .info {
+    #info {
       margin-top: 15px;
-      line-height: 1.5;
       font-size: 1.2rem;
-      color: #FFD700;
+      color: white;
     }
 
-    /* Карта */
     #map {
       margin-top: 20px;
       height: 300px;
       width: 90%;
-      border-radius: 15px;
+      border-radius: 10px;
       overflow: hidden;
-      border: 2px solid #FFA500;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     }
 
-    /* Футер */
     footer {
       margin-top: 20px;
       font-size: 1rem;
       color: #FFA500;
-      text-shadow: 0 2px 5px rgba(255, 165, 0, 0.6);
     }
 
     footer a {
-      color: #FFD700;
+      color: #FFA500;
       text-decoration: none;
       font-weight: bold;
     }
 
     footer a:hover {
       text-decoration: underline;
-      color: #FF8C00;
     }
   </style>
 </head>
@@ -111,8 +85,9 @@
   <div class="container">
     <h1>GIO-INFO</h1>
     <button onclick="getLocation()">🌍 Определить местоположение</button>
-    <div id="info" class="info"></div>
-    <button class="btn-copy" id="copyButton" style="display: none;" onclick="copyToClipboard()">📋 Копировать координаты</button>
+    <div id="info"></div>
+    <button id="copyButton" style="display: none;" onclick="copyToClipboard()">📋 Копировать координаты</button>
+    <button id="shareButton" style="display: none;" onclick="shareLocation()">🔗 Поделиться</button>
   </div>
   <div id="map"></div>
   <footer>
@@ -125,11 +100,13 @@
     function getLocation() {
       const infoDiv = document.getElementById('info');
       const copyButton = document.getElementById('copyButton');
+      const shareButton = document.getElementById('shareButton');
       infoDiv.textContent = '🌍 Определение местоположения...';
 
       if (!navigator.geolocation) {
         infoDiv.textContent = '🚫 Ваш браузер не поддерживает геолокацию.';
         copyButton.style.display = 'none';
+        shareButton.style.display = 'none';
         return;
       }
 
@@ -142,11 +119,13 @@
             <p><strong>Долгота:</strong> ${longitude.toFixed(4)}</p>
           `;
           copyButton.style.display = 'block';
+          shareButton.style.display = 'block';
           updateMap(latitude, longitude);
         },
         () => {
           infoDiv.textContent = '❌ Не удалось получить доступ к геолокации. Проверьте разрешения.';
           copyButton.style.display = 'none';
+          shareButton.style.display = 'none';
         }
       );
     }
@@ -156,6 +135,19 @@
         navigator.clipboard.writeText(currentCoords)
           .then(() => alert('✔️ Координаты скопированы в буфер обмена!'))
           .catch(() => alert('⚠️ Ошибка при копировании.'));
+      }
+    }
+
+    function shareLocation() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Мои координаты',
+          text: `Посмотри, где я нахожусь:\n${currentCoords}`,
+          url: window.location.href
+        })
+        .catch((error) => console.log('Ошибка при отправке:', error));
+      } else {
+        alert('❌ Ваш браузер не поддерживает функцию "Поделиться".');
       }
     }
 
