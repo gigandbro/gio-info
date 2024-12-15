@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Локальная Геолокация</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #121212;
+      color: #FFFFFF;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .container {
+      padding: 20px;
+      background-color: #1E1E1E;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      max-width: 400px;
+      width: 90%;
+    }
+    h1 {
+      color: #00FF7F;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px 0;
+      background-color: #00FF7F;
+      color: #121212;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background-color: #00cc63;
+    }
+    .info {
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Локальная Геолокация</h1>
+    <button onclick="getLocation()">Определить местоположение</button>
+    <div id="info" class="info"></div>
+  </div>
+
+  <script>
+    function getLocation() {
+      const infoDiv = document.getElementById('info');
+      infoDiv.textContent = 'Определение местоположения...';
+
+      if (!navigator.geolocation) {
+        infoDiv.textContent = 'Ваш браузер не поддерживает геолокацию.';
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          infoDiv.innerHTML = `
+            <p><strong>Широта:</strong> ${latitude.toFixed(4)}</p>
+            <p><strong>Долгота:</strong> ${longitude.toFixed(4)}</p>
+          `;
+        },
+        () => {
+          infoDiv.textContent = 'Не удалось получить доступ к геолокации. Проверьте разрешения.';
+        }
+      );
+    }
+  </script>
+</body>
+</html>
