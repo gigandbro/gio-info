@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Локальная Геолокация</title>
+  <title>GIO-INFO</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/119/119595.png">
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -32,7 +33,7 @@
     }
     button {
       padding: 10px 20px;
-      margin: 10px 0;
+      margin: 10px 10px 0 10px;
       background-color: #00FF7F;
       color: #121212;
       font-size: 1rem;
@@ -47,38 +48,64 @@
     }
     .info {
       margin-top: 15px;
+      line-height: 1.5;
+    }
+    .btn-copy {
+      background-color: #FFA07A;
+      margin-top: 10px;
+    }
+    .btn-copy:hover {
+      background-color: #FF6347;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Локальная Геолокация</h1>
+    <h1>GIO-INFO</h1>
     <button onclick="getLocation()">Определить местоположение</button>
     <div id="info" class="info"></div>
+    <button class="btn-copy" id="copyButton" style="display: none;" onclick="copyToClipboard()">Копировать координаты</button>
   </div>
 
   <script>
+    let currentCoords = '';
+
+    // Получение геолокации
     function getLocation() {
       const infoDiv = document.getElementById('info');
+      const copyButton = document.getElementById('copyButton');
       infoDiv.textContent = 'Определение местоположения...';
 
       if (!navigator.geolocation) {
         infoDiv.textContent = 'Ваш браузер не поддерживает геолокацию.';
+        copyButton.style.display = 'none';
         return;
       }
 
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
+          currentCoords = `Широта: ${latitude.toFixed(4)}, Долгота: ${longitude.toFixed(4)}`;
           infoDiv.innerHTML = `
             <p><strong>Широта:</strong> ${latitude.toFixed(4)}</p>
             <p><strong>Долгота:</strong> ${longitude.toFixed(4)}</p>
           `;
+          copyButton.style.display = 'block';
         },
         () => {
           infoDiv.textContent = 'Не удалось получить доступ к геолокации. Проверьте разрешения.';
+          copyButton.style.display = 'none';
         }
       );
+    }
+
+    // Копирование координат в буфер обмена
+    function copyToClipboard() {
+      if (currentCoords) {
+        navigator.clipboard.writeText(currentCoords)
+          .then(() => alert('Координаты скопированы в буфер обмена!'))
+          .catch(() => alert('Ошибка при копировании.'));
+      }
     }
   </script>
 </body>
